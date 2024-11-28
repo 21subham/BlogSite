@@ -1,5 +1,5 @@
+import { forwardRef } from "react";
 import { useId } from "react";
-import React from "react";
 import PropTypes from "prop-types";
 
 function Select({ options, label, className = "", ...props }, ref) {
@@ -37,4 +37,4 @@ Select.propTypes = {
   props: PropTypes.object, // Any additional props
 };
 
-export default React.forwardRef(Select);
+export default forwardRef(Select);
