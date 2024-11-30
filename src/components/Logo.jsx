@@ -1,9 +1,9 @@
-function Logo({ width = "100px" }) {
+function Logo() {
   return (
     <div className="h-full flex items-center">
       <img
         src="./src/assets/logo.png"
-        style={{ width: width, maxHeight: "100%" }}
+        style={{ width: "100%", maxHeight: "100%" }}
         className="object-contain"
         alt="Logo"
       />

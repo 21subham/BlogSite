@@ -1,4 +1,4 @@
-function Logo({ width = "100px" }) {
+function Logo() {
   return <div></div>;
 }
 
