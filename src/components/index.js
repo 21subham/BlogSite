@@ -5,7 +5,7 @@ import LogoutBtn from "./header/LogoutBtn";
 import Button from "./Button";
 import Input from "./Input";
 import Login from "./Login";
-import PostCard from "./PostCard.jsx";
+
 import AuthLayout from "./AuthLayout";
 import Select from "./Select";
 import RTE from "./RTE";
@@ -14,7 +14,6 @@ import PostForm from "./post-form/PostForm.jsx";
 import Logo from "./Logo";
 
 export {
-  PostCard,
   Logo,
   Header,
   Footer,
