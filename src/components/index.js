@@ -10,10 +10,11 @@ import AuthLayout from "./AuthLayout";
 import Select from "./Select";
 import RTE from "./RTE";
 import Signup from "./Signup";
-import PostForm from "./post-form/PostForm";
+import PostForm from "./post-form/PostForm.jsx";
 import Logo from "./Logo";
 
 export {
+  PostCard,
   Logo,
   Header,
   Footer,
@@ -22,7 +23,6 @@ export {
   Button,
   Input,
   Login,
-  PostCard,
   AuthLayout,
   RTE,
   Signup,
