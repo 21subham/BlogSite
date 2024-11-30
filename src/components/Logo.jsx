@@ -3,7 +3,7 @@ function Logo() {
     <div className="h-full flex items-center">
       <img
         src="./src/assets/logo.png"
-        style={{ width: "100%", maxHeight: "100%" }}
+        style={{ width: "100px", maxHeight: "100%" }}
         className="object-contain"
         alt="Logo"
       />
