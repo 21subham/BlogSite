@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login as authLogin } from "../appwrite/auth";
-import { Logo, Input, Button } from "../index";
+import { login as authLogin } from "../store/authSlice";
+import { Logo, Input, Button } from "./index";
 import { useDispatch } from "react-redux";
 import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
@@ -12,17 +12,20 @@ function Login() {
   const [error, seterror] = useState("");
 
   const login = async (data) => {
-    seterror("");
+    seterror(""); //clear all errors
     try {
       const session = await authService.login(data);
+
       if (session) {
+        //get userdata from appwrite
         const userData = await authService.getCurrentUser();
+
         // called login from authslice and status set to true
         if (userData) dispatch(authLogin(userData));
         navigate("/");
       }
     } catch (error) {
-      seterror(error.message);
+      seterror(error.message, "User data is not being passed");
     }
   };
 
@@ -72,7 +75,7 @@ function Login() {
                 required: true,
               })}
             />
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full ">
               Sign In
             </Button>
           </div>

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Input, Select, RTE } from "../index";
-import service from "../../appwrite/config";
+import { Button, Input, RTE, Select } from "..";
+import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
@@ -11,69 +11,70 @@ export default function PostForm({ post }) {
     useForm({
       defaultValues: {
         title: post?.title || "",
-        slug: post?.slug || "",
+        slug: post?.$id || "",
         content: post?.content || "",
         status: post?.status || "active",
       },
     });
 
   const navigate = useNavigate();
-  //get userdata from store
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
     if (post) {
-      const file = data.image[0] ? service.uploadFile(data.image[0]) : null;
+      const file = data.image[0]
+        ? await appwriteService.uploadFile(data.image[0])
+        : null;
 
       if (file) {
-        service.deleteFile(post.featuredImage);
+        appwriteService.deleteFile(post.featuredImage);
       }
-      const dbPost = await service.updatePost(post.$id, {
+
+      const dbPost = await appwriteService.updatePost(post.$id, {
         ...data,
-        featuredImage: file ? file.$id : undefined,
+        featuredImage: file ? file.$id : (undefined, console.log("no file")),
       });
 
       if (dbPost) {
-        navigate(`/posts/${dbPost.$id}`);
+        navigate(`/post/${dbPost.$id}`);
       }
     } else {
-      const file = data.image[0] ? service.uploadFile(data.image[0]) : null;
+      const file = await appwriteService.uploadFile(data.image[0]);
 
       if (file) {
-        const fileID = file.$id;
-        data.featuredImage = fileID;
-        const dbPost = await service.createPost({
+        const fileId = file.$id;
+        data.featuredImage = fileId;
+        const dbPost = await appwriteService.createPost({
           ...data,
           userId: userData.$id,
         });
 
         if (dbPost) {
-          navigate(`/posts/${dbPost.$id}`);
+          navigate(`/post/${dbPost.$id}`);
         }
       }
     }
   };
 
   const slugTransform = useCallback((value) => {
-    if (value && typeof value === "string") {
+    if (value && typeof value === "string")
       return value
         .trim()
         .toLowerCase()
-        .replace(/[^a-z\d\s]+/g, "-")
+        .replace(/[^a-zA-Z\d\s]+/g, "-")
         .replace(/\s/g, "-");
-    } else return "";
-  });
+
+    return "";
+  }, []);
 
   React.useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue("slug", slugTransform(value.title, { shouldValidate: true }));
+        setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
 
   return (
@@ -114,12 +115,13 @@ export default function PostForm({ post }) {
         {post && (
           <div className="w-full mb-4">
             <img
-              src={service.getFilePreview(post.featuredImage)}
+              src={appwriteService.getFilePreview(post.featuredImage)}
               alt={post.title}
               className="rounded-lg"
             />
           </div>
         )}
+
         <Select
           options={["active", "inactive"]}
           label="Status"
@@ -138,6 +140,13 @@ export default function PostForm({ post }) {
   );
 }
 
+// Props validation with PropTypes
 PostForm.propTypes = {
-  post: PropTypes.object,
+  post: PropTypes.shape({
+    title: PropTypes.string,
+    $id: PropTypes.string,
+    content: PropTypes.string,
+    status: PropTypes.oneOf(["active", "inactive"]),
+    featuredImage: PropTypes.string,
+  }),
 };

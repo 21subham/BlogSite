@@ -1,9 +1,12 @@
+import { useState, useEffect } from "react";
 import { Container, LogoutBtn, Logo } from "../index";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import authService from "../../appwrite/auth";
 
 function Header() {
+  const [username, setUsername] = useState(null);
   const authStatus = useSelector((state) => state.auth.status);
   const navigate = useNavigate();
   const navItems = [
@@ -33,16 +36,36 @@ function Header() {
       active: authStatus,
     },
   ];
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await authService.getCurrentUser();
+      if (user) {
+        setUsername(user.name);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
-    <header className="py-3 shadow bg-gray-500">
+    <header className="py-2 shadow bg-gray-500 rounded">
       <Container>
-        <nav className="flex">
-          <div className="mr-4">
+        <nav className="flex items-center">
+          {/* Logo Section */}
+          <div className="mr-4 flex items-center">
             <Link to="/">
-              <Logo width="100px" />
+              <Logo width="80px" />
             </Link>
+
+            {/* username */}
+            <div className="flex ml-auto text-xl px-2 text-black font-bold">
+              {username ? username : "Loading..."}
+            </div>
           </div>
-          <ul className="flex ml-auto">
+
+          {/* Navigation Links */}
+          <ul className="flex ml-auto text-xl">
             {navItems.map((item) =>
               item.active ? (
                 <li key={item.name}>

@@ -30,11 +30,11 @@ function Select({ options, label, className = "", ...props }, ref) {
   );
 }
 
-Select.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.string).isRequired, // Array of strings for options
-  label: PropTypes.string, // Optional label text
-  className: PropTypes.string, // Additional classes for customization
-  props: PropTypes.object, // Any additional props
-};
+// Select.propTypes = {
+//   options: PropTypes.arrayOf(PropTypes.string).isRequired, // Array of strings for options
+//   label: PropTypes.string, // Optional label text
+//   className: PropTypes.string, // Additional classes for customization
+//   props: PropTypes.object, // Any additional props
+// };
 
 export default forwardRef(Select);
