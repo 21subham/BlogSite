@@ -46,7 +46,7 @@ function Header() {
     };
 
     fetchUser();
-  }, []);
+  }, [authStatus]);
 
   return (
     <header className="py-2 shadow bg-gray-500 rounded">
