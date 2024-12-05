@@ -55,7 +55,7 @@ function Header() {
           {/* Logo Section */}
           <div className="mr-4 flex items-center">
             <Link to="/">
-              <Logo width="80px" />
+              <Logo />
             </Link>
 
             {/* username */}
