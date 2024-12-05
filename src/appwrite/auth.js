@@ -21,14 +21,18 @@ export class AuthService {
         password,
         name
       );
-
       if (userAccount) {
-        return this.login(email, password);
+        return this.login({ email, password });
       } else {
         return userAccount;
       }
     } catch (error) {
-      console.log("Create account error", error);
+      console.log("Appwrite Service :: createAccount :: :: error : ", error);
+      if (error.code === 409) {
+        throw new Error("Email address is already in use.");
+      } else {
+        throw error;
+      }
     }
   }
 
